@@ -313,11 +313,11 @@
     &copy; بجاد الأثري حقوق الطبع و النشر
   </footer>
   <script>
-    const githubUser = "bidjadraft"; // عدل إلى اسم المستخدم الخاص بك
-    const repo = "test";              // اسم المستودع الصحيح
-    const folder = "news";            // اسم المجلد الصحيح
+    const githubUser = "bidjadraft";
+    const repo = "test";
+    const folder = "news";
 
-    // دالة لاستخراج front-matter من نص ملف md
+    // دالة استخراج front-matter من نص الملف
     function parseFrontMatter(mdText) {
       const fmMatch = mdText.match(/^---\s*([\s\S]*?)\s*---/);
       let meta = {};
@@ -361,7 +361,8 @@
             category: meta.category || "غير مصنف",
             badge: (meta.badge && meta.badge.toLowerCase() !== "لا شيء") ? meta.badge : "",
             date: meta.date || "",
-            pageUrl: `https://github.com/${githubUser}/${repo}/blob/main/${folder}/${file.name}`
+            // التعديل هنا: الرابط إلى GitHub Pages وليس GitHub
+            pageUrl: `https://${githubUser}.github.io/${repo}/${folder}/${file.name}`
           });
         }
 
