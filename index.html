@@ -317,7 +317,6 @@
     const repo = "test";
     const folder = "news";
 
-    // دالة استخراج front-matter من نص الملف
     function parseFrontMatter(mdText) {
       const fmMatch = mdText.match(/^---\s*([\s\S]*?)\s*---/);
       let meta = {};
@@ -361,8 +360,8 @@
             category: meta.category || "غير مصنف",
             badge: (meta.badge && meta.badge.toLowerCase() !== "لا شيء") ? meta.badge : "",
             date: meta.date || "",
-            // التعديل هنا: الرابط إلى GitHub Pages وليس GitHub
-            pageUrl: `https://${githubUser}.github.io/${repo}/${folder}/${file.name}`
+            // الرابط بدون امتداد .md
+            pageUrl: `https://${githubUser}.github.io/${repo}/${folder}/${file.name.replace(/\.md$/, '')}`
           });
         }
 
