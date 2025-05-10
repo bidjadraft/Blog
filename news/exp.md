@@ -1,6 +1,7 @@
 ---
 title: "لا اعرف و لكن عليك ان تفعل هذا الشيء"
 date: 2025-05-09
+layout: default
 image: https://media1.thehungryjpeg.com/thumbs/800_3841851_qx3933imzjf7rur4h8ed46s2llddsu0shv68uncs.jpg
 category: العادة السرية
 badge: لا شيء
