@@ -313,11 +313,11 @@
     &copy; بجاد الأثري حقوق الطبع و النشر
   </footer>
   <script>
-    const githubUser = "bidjadraft";
-    const repo = "Blog";
-    const folder = "test"; // تم تعديل المجلد هنا
+    const githubUser = "bidjadraft"; // عدل إلى اسم المستخدم الخاص بك
+    const repo = "test";              // اسم المستودع الصحيح
+    const folder = "news";            // اسم المجلد الصحيح
 
-    // دالة استخراج front-matter من نص الملف
+    // دالة لاستخراج front-matter من نص ملف md
     function parseFrontMatter(mdText) {
       const fmMatch = mdText.match(/^---\s*([\s\S]*?)\s*---/);
       let meta = {};
@@ -333,46 +333,43 @@
       return meta;
     }
 
-    fetch(`https://api.github.com/repos/${githubUser}/${repo}/contents/${folder}`)
-      .then(res => res.json())
-      .then(async files => {
-        if (!Array.isArray(files)) return;
+    async function loadNews() {
+      try {
+        const res = await fetch(`https://api.github.com/repos/${githubUser}/${repo}/contents/${folder}`);
+        const files = await res.json();
 
-        files = files
-          .filter(file => file.name.endsWith('.md'))
-          .sort((a, b) => b.name.localeCompare(a.name));
+        if (!Array.isArray(files)) {
+          console.error("لم يتم جلب الملفات بشكل صحيح");
+          return;
+        }
 
-        if (files.length === 0) return;
+        const mdFiles = files.filter(f => f.name.endsWith('.md')).sort((a, b) => b.name.localeCompare(a.name));
+        if (mdFiles.length === 0) {
+          console.log("لا توجد ملفات md في المجلد");
+          return;
+        }
 
-        // جلب محتوى كل ملف md وتحليل front-matter
-        let news = await Promise.all(files.map(async (file) => {
-          let rawUrl = file.download_url;
-          let mdText = "";
-          try {
-            mdText = await fetch(rawUrl).then(r => r.text());
-          } catch (e) {}
-          let meta = parseFrontMatter(mdText);
+        const news = [];
 
-          // fallback إذا لم يوجد عنوان أو صورة أو تصنيف
-          let title = meta.title || file.name.replace('.md', '').replace(/-/g, ' ');
-          let image = meta.image || "https://via.placeholder.com/1080x720?text=خبر";
-          let category = meta.category || "غير مصنف";
-          let badge = meta.badge || "";
-          let date = meta.date || "";
+        for (const file of mdFiles) {
+          const mdText = await fetch(file.download_url).then(r => r.text());
+          const meta = parseFrontMatter(mdText);
 
-          // رابط الملف على GitHub (أو يمكنك تغييره لرابط العرض في موقعك)
-          let pageUrl = `https://github.com/${githubUser}/${repo}/blob/main/${folder}/${file.name}`;
+          news.push({
+            title: meta.title || file.name.replace('.md', '').replace(/-/g, ' '),
+            image: meta.image || "https://via.placeholder.com/1080x720?text=خبر",
+            category: meta.category || "غير مصنف",
+            badge: (meta.badge && meta.badge.toLowerCase() !== "لا شيء") ? meta.badge : "",
+            date: meta.date || "",
+            pageUrl: `https://github.com/${githubUser}/${repo}/blob/main/${folder}/${file.name}`
+          });
+        }
 
-          return { title, image, category, badge, date, pageUrl };
-        }));
+        if (news.length > 0 && !news[0].badge) {
+          news[0].badge = "جديد";
+        }
 
-        // وضع "جديد" على أول خبر إذا لم يكن له badge
-        news = news.map((n, i) => {
-          if (i === 0 && !n.badge) n.badge = "جديد";
-          return n;
-        });
-
-        let html = news.map(n => `
+        const html = news.map(n => `
           <article class="news-card" tabindex="0" role="region" aria-label="خبر: ${n.title}">
             <div class="news-card-img-wrap">
               <img class="news-card-img" src="${n.image}" alt="صورة الخبر: ${n.title}" />
@@ -389,10 +386,12 @@
         `).join('');
 
         document.getElementById('news-cards-container').innerHTML = html;
-      })
-      .catch(err => {
-        console.error("حدث خطأ أثناء جلب الأخبار:", err);
-      });
+      } catch (error) {
+        console.error("حدث خطأ أثناء جلب الأخبار:", error);
+      }
+    }
+
+    loadNews();
   </script>
 </body>
 </html>
