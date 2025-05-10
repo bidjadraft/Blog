@@ -1,1 +1,26 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{{ page.title }}</title>
+  <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+  <style>
+    body {
+      direction: rtl;
+      text-align: right;
+      font-family: "Cairo", "Segoe UI", "Arial", sans-serif;
+      background-color: #18181b;
+      color: #e5e7eb;
+      line-height: 1.6;
+      margin: 0;
+      padding: 1rem;
+    }
+    /* يمكنك إضافة المزيد من التنسيقات حسب حاجتك */
+  </style>
+</head>
+<body>
+  {{ content }}
+</body>
+</html>
 
