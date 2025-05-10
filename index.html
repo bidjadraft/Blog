@@ -3,301 +3,44 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>أخبار تلقائية من GitHub (ملفات MD)</title>
+  <title>أخبار تلقائية من GitHub (ملفات MD مع front-matter)</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"/>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;700&display=swap" rel="stylesheet"/>
   <style>
-    /* نفس التنسيقات التي وضعتها سابقاً */
-    body {
-      margin: 0;
-      font-family: "Cairo", "Segoe UI", "Arial", sans-serif;
-      background: #18181b;
-      color: #e5e7eb;
-      line-height: 1.6;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-    }
-    header {
-      background: #18181b;
-      padding: 16px 18px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      border-bottom: 1px solid #23232a;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      box-shadow: 0 2px 8px #0008;
-    }
-    .profile {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    .profile-img {
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 2px solid #23232a;
-      box-shadow: 0 2px 8px #0003;
-      transition: transform 0.3s ease;
-    }
-    .profile-img:hover {
-      transform: scale(1.1);
-      box-shadow: 0 4px 16px #2563ebaa;
-    }
-    .username {
-      font-size: 1.1em;
-      color: #e5e7eb;
-      font-weight: 700;
-      margin-left: 10px;
-      font-family: "Cairo", "Segoe UI", "Arial", sans-serif;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      user-select: none;
-    }
-    .username .blue {
-      color: #60a5fa;
-      font-weight: 700;
-      letter-spacing: 0.05em;
-    }
-    .socials {
-      display: flex;
-      gap: 16px;
-    }
-    .socials a {
-      color: #a1a1aa;
-      font-size: 1.6em;
-      transition: color 0.3s, transform 0.3s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-decoration: none;
-    }
-    .socials a:hover,
-    .socials a:focus {
-      color: #60a5fa;
-      transform: scale(1.2);
-      outline: none;
-    }
-    .news-cards-container {
-      width: 100vw;
-      max-width: 100vw;
-      margin: 30px 0 0 0;
-      display: flex;
-      flex-direction: column;
-      gap: 28px;
-      padding: 0;
-      flex-grow: 1;
-    }
-    .news-card {
-      background: #23232a;
-      border-radius: 20px;
-      overflow: hidden;
-      box-shadow: 0 10px 30px #000a;
-      display: flex;
-      flex-direction: column;
-      width: 100vw;
-      max-width: 100vw;
-      margin: 0;
-      position: relative;
-      min-height: 340px;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      cursor: pointer;
-    }
-    .news-card:hover,
-    .news-card:focus-within {
-      transform: translateY(-6px);
-      box-shadow: 0 14px 40px #2563ebbb;
-    }
-    .news-card-img-wrap {
-      position: relative;
-      width: 100vw;
-      max-width: 100vw;
-      aspect-ratio: 16 / 9;
-      background: #23232a;
-      overflow: hidden;
-      border-top-left-radius: 20px;
-      border-top-right-radius: 20px;
-    }
-    .news-card-img {
-      width: 100vw;
-      max-width: 100vw;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-      background: #23232a;
-      transition: filter 0.3s ease;
-      position: absolute;
-      top: 0;
-      left: 0;
-    }
-    .news-card:hover .news-card-img,
-    .news-card:focus-within .news-card-img {
-      filter: brightness(0.8);
-    }
-    .news-card-badge {
-      position: absolute;
-      top: 16px;
-      right: 16px;
-      background: #2563eb;
-      color: #fff;
-      font-size: 1.05em;
-      padding: 8px 22px;
-      border-radius: 14px;
-      z-index: 2;
-      font-weight: 700;
-      box-shadow: 0 3px 10px #0006;
-      user-select: none;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-    }
-    .news-card-content {
-      padding: 20px 18px 16px 18px;
-      display: flex;
-      flex-direction: column;
-      flex: 1 1 auto;
-      justify-content: flex-start;
-      background: #23232a;
-    }
-    .news-card-title {
-      font-size: 1.25em;
-      color: #fff;
-      font-weight: 800;
-      margin: 0 0 12px 0;
-      text-decoration: none;
-      display: block;
-      line-height: 1.5;
-      transition: color 0.3s ease;
-      flex-shrink: 0;
-      word-break: break-word;
-    }
-    .news-card-title:hover,
-    .news-card-title:focus {
-      color: #60a5fa;
-      outline: none;
-      text-decoration: underline;
-    }
-    .news-card-meta-row {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      margin-top: auto;
-      flex-wrap: wrap;
-    }
-    .news-card-meta {
-      color: #60a5fa;
-      font-size: 1.05em;
-      font-weight: 600;
-      text-decoration: none;
-      margin-left: 4px;
-      margin-right: 4px;
-      transition: color 0.3s ease;
-      user-select: none;
-    }
-    .news-card-meta:hover,
-    .news-card-meta:focus {
-      color: #fff;
-      text-decoration: underline;
-      outline: none;
-      cursor: default;
-    }
-    .news-card-date {
-      color: #a1a1aa;
-      font-size: 1em;
-      font-weight: 400;
-      user-select: none;
-      letter-spacing: 0.02em;
-    }
-    footer {
-      text-align: center;
-      color: #71717a;
-      font-size: 1.05em;
-      padding: 28px 12px 24px 12px;
-      margin-top: 40px;
-      border-top: 1px solid #2c2c36;
-      letter-spacing: 0.06em;
-      font-family: "Cairo", "Segoe UI", "Arial", sans-serif;
-      user-select: none;
-      background: #18181b;
-      transition: color 0.3s ease;
-    }
-    footer:hover {
-      color: #60a5fa;
-    }
-    @media (max-width: 600px) {
-      header {
-        padding: 12px 10px;
-      }
-      .profile-img {
-        width: 38px;
-        height: 38px;
-      }
-      .username {
-        font-size: 1em;
-        gap: 4px;
-      }
-      .news-cards-container {
-        width: 100vw;
-        max-width: 100vw;
-        gap: 18px;
-        padding: 0;
-      }
-      .news-card {
-        min-width: 100vw;
-        max-width: 100vw;
-        border-radius: 16px;
-      }
-      .news-card-img-wrap {
-        aspect-ratio: 16 / 9;
-        width: 100vw;
-        max-width: 100vw;
-        border-radius: 16px 16px 0 0;
-      }
-      .news-card-img {
-        width: 100vw;
-        max-width: 100vw;
-        border-top-left-radius: 16px;
-        border-top-right-radius: 16px;
-      }
-      .news-card-content {
-        padding: 14px 12px 12px 12px;
-      }
-      .news-card-title {
-        font-size: 1.1em;
-      }
-      .news-card-badge {
-        font-size: 0.95em;
-        padding: 5px 14px;
-        border-radius: 10px;
-        top: 10px;
-        right: 10px;
-      }
-      .news-card-meta {
-        font-size: 0.95em;
-      }
-      .news-card-date {
-        font-size: 0.9em;
-      }
-      footer {
-        font-size: 1em;
-        padding: 20px 10px 16px 10px;
-        margin-top: 30px;
-      }
-    }
+    /* ... نفس التنسيقات السابقة ... */
+    body {margin:0;font-family:"Cairo","Segoe UI","Arial",sans-serif;background:#18181b;color:#e5e7eb;line-height:1.6;display:flex;flex-direction:column;min-height:100vh;}
+    header {background:#18181b;padding:16px 18px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #23232a;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px #0008;}
+    .profile {display:flex;align-items:center;gap:12px;}
+    .profile-img {width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid #23232a;box-shadow:0 2px 8px #0003;transition:transform 0.3s ease;}
+    .profile-img:hover {transform:scale(1.1);box-shadow:0 4px 16px #2563ebaa;}
+    .username {font-size:1.1em;color:#e5e7eb;font-weight:700;margin-left:10px;font-family:"Cairo","Segoe UI","Arial",sans-serif;display:flex;align-items:center;gap:6px;user-select:none;}
+    .username .blue {color:#60a5fa;font-weight:700;letter-spacing:0.05em;}
+    .socials {display:flex;gap:16px;}
+    .socials a {color:#a1a1aa;font-size:1.6em;transition:color 0.3s,transform 0.3s;display:flex;align-items:center;justify-content:center;text-decoration:none;}
+    .socials a:hover,.socials a:focus {color:#60a5fa;transform:scale(1.2);outline:none;}
+    .news-cards-container {width:100vw;max-width:100vw;margin:30px 0 0 0;display:flex;flex-direction:column;gap:28px;padding:0;flex-grow:1;}
+    .news-card {background:#23232a;border-radius:20px;overflow:hidden;box-shadow:0 10px 30px #000a;display:flex;flex-direction:column;width:100vw;max-width:100vw;margin:0;position:relative;min-height:340px;transition:transform 0.3s ease,box-shadow 0.3s ease;cursor:pointer;}
+    .news-card:hover,.news-card:focus-within {transform:translateY(-6px);box-shadow:0 14px 40px #2563ebbb;}
+    .news-card-img-wrap {position:relative;width:100vw;max-width:100vw;aspect-ratio:16/9;background:#23232a;overflow:hidden;border-top-left-radius:20px;border-top-right-radius:20px;}
+    .news-card-img {width:100vw;max-width:100vw;height:100%;object-fit:cover;display:block;background:#23232a;transition:filter 0.3s ease;position:absolute;top:0;left:0;}
+    .news-card:hover .news-card-img,.news-card:focus-within .news-card-img {filter:brightness(0.8);}
+    .news-card-badge {position:absolute;top:16px;right:16px;background:#2563eb;color:#fff;font-size:1.05em;padding:8px 22px;border-radius:14px;z-index:2;font-weight:700;box-shadow:0 3px 10px #0006;user-select:none;letter-spacing:0.05em;text-transform:uppercase;}
+    .news-card-content {padding:20px 18px 16px 18px;display:flex;flex-direction:column;flex:1 1 auto;justify-content:flex-start;background:#23232a;}
+    .news-card-title {font-size:1.25em;color:#fff;font-weight:800;margin:0 0 12px 0;text-decoration:none;display:block;line-height:1.5;transition:color 0.3s ease;flex-shrink:0;word-break:break-word;}
+    .news-card-title:hover,.news-card-title:focus {color:#60a5fa;outline:none;text-decoration:underline;}
+    .news-card-meta-row {display:flex;align-items:center;gap:14px;margin-top:auto;flex-wrap:wrap;}
+    .news-card-meta {color:#60a5fa;font-size:1.05em;font-weight:600;text-decoration:none;margin-left:4px;margin-right:4px;transition:color 0.3s ease;user-select:none;}
+    .news-card-meta:hover,.news-card-meta:focus {color:#fff;text-decoration:underline;outline:none;cursor:default;}
+    .news-card-date {color:#a1a1aa;font-size:1em;font-weight:400;user-select:none;letter-spacing:0.02em;}
+    footer {text-align:center;color:#71717a;font-size:1.05em;padding:28px 12px 24px 12px;margin-top:40px;border-top:1px solid #2c2c36;letter-spacing:0.06em;font-family:"Cairo","Segoe UI","Arial",sans-serif;user-select:none;background:#18181b;transition:color 0.3s ease;}
+    footer:hover {color:#60a5fa;}
+    @media (max-width:600px) {.news-card,.news-card-img-wrap,.news-card-img,.news-cards-container{max-width:100vw;width:100vw;}}
   </style>
 </head>
 <body>
   <header>
     <div class="profile">
-      <img
-        class="profile-img"
-        src="https://randomuser.me/api/portraits/men/32.jpg"
-        alt="Profile"
-      />
+      <img class="profile-img" src="https://randomuser.me/api/portraits/men/32.jpg" alt="Profile"/>
       <div class="username"><span>بجاد</span> <span class="blue">الأثري</span></div>
     </div>
     <nav aria-label="روابط التواصل الاجتماعي" class="socials">
@@ -317,9 +60,25 @@
     const repo = "Blog";
     const folder = "news";
 
+    // دالة استخراج front-matter من نص الملف
+    function parseFrontMatter(mdText) {
+      const fmMatch = mdText.match(/^---\s*([\s\S]*?)\s*---/);
+      let meta = {};
+      if (fmMatch) {
+        const lines = fmMatch[1].split('\n');
+        lines.forEach(line => {
+          const match = line.match(/^(\w+):\s*["']?(.+?)["']?$/);
+          if (match) {
+            meta[match[1].trim()] = match[2].trim();
+          }
+        });
+      }
+      return meta;
+    }
+
     fetch(`https://api.github.com/repos/${githubUser}/${repo}/contents/${folder}`)
       .then(res => res.json())
-      .then(files => {
+      .then(async files => {
         if (!Array.isArray(files)) return;
 
         files = files
@@ -328,24 +87,31 @@
 
         if (files.length === 0) return;
 
-        let news = files.map(file => {
-          // استخراج العنوان من اسم الملف
-          let title = file.name.replace('.md', '').replace(/-/g, ' ');
-          let image = "https://via.placeholder.com/1080x720?text=خبر";
-          let category = "غير مصنف";
-          let badge = "";
-          let date = new Date(file.git_url ? file.git_url : Date.now()).toLocaleDateString('ar-EG');
+        // جلب محتوى كل ملف md وتحليل front-matter
+        let news = await Promise.all(files.map(async (file) => {
+          let rawUrl = file.download_url;
+          let mdText = "";
+          try {
+            mdText = await fetch(rawUrl).then(r => r.text());
+          } catch (e) {}
+          let meta = parseFrontMatter(mdText);
 
-          // رابط عرض الملف على GitHub (يمكن تغييره حسب استضافتك)
+          // fallback إذا لم يوجد عنوان أو صورة أو تصنيف
+          let title = meta.title || file.name.replace('.md', '').replace(/-/g, ' ');
+          let image = meta.image || "https://via.placeholder.com/1080x720?text=خبر";
+          let category = meta.category || "غير مصنف";
+          let badge = meta.badge || "";
+          let date = meta.date || "";
+
+          // رابط الملف على GitHub (أو يمكنك تغييره لرابط العرض في موقعك)
           let pageUrl = `https://github.com/${githubUser}/${repo}/blob/main/${folder}/${file.name}`;
 
           return { title, image, category, badge, date, pageUrl };
-        });
+        }));
 
-        // وضع "جديد" على أول خبر
+        // وضع "جديد" على أول خبر إذا لم يكن له badge
         news = news.map((n, i) => {
           if (i === 0 && !n.badge) n.badge = "جديد";
-          else n.badge = "";
           return n;
         });
 
