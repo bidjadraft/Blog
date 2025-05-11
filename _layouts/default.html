@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>{{ page.title }}</title>
-  <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+  <title>{{ page.title | escape }}</title>
   <style>
+    /* إعدادات عامة */
     body {
       direction: rtl;
       text-align: right;
@@ -14,13 +14,92 @@
       color: #e5e7eb;
       line-height: 1.6;
       margin: 0;
-      padding: 1rem;
+      padding: 1rem 1.5rem;
+      min-height: 100vh;
+      box-sizing: border-box;
     }
-    /* يمكنك إضافة المزيد من التنسيقات حسب حاجتك */
+
+    /* تنسيق المحتوى */
+    article {
+      max-width: 900px;
+      margin: 0 auto;
+      background: #23232a;
+      padding: 20px 25px;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.7);
+    }
+
+    /* تنسيق العناوين */
+    h1, h2, h3, h4, h5, h6 {
+      color: #60a5fa;
+      margin-top: 1.5em;
+      margin-bottom: 0.5em;
+    }
+
+    /* تنسيق الفقرات */
+    p {
+      margin-bottom: 1em;
+      font-size: 1.1rem;
+    }
+
+    /* تنسيق الصور داخل المقال */
+    article img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+      margin: 1.5em auto;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    }
+
+    /* تنسيق الروابط */
+    a {
+      color: #60a5fa;
+      text-decoration: none;
+    }
+    a:hover, a:focus {
+      text-decoration: underline;
+      outline: none;
+    }
+
+    /* تنسيق القوائم */
+    ul, ol {
+      margin: 1em 0 1em 1.5em;
+    }
+
+    /* تنسيق الأكواد */
+    pre, code {
+      background: #1e1e2f;
+      color: #c5c8c6;
+      padding: 0.3em 0.5em;
+      border-radius: 6px;
+      font-family: "Courier New", Courier, monospace;
+      overflow-x: auto;
+    }
+
+    pre {
+      padding: 1em;
+      margin: 1.5em 0;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 600px) {
+      body {
+        padding: 1rem 1rem;
+      }
+      article {
+        padding: 15px 15px;
+        border-radius: 10px;
+      }
+      p {
+        font-size: 1rem;
+      }
+    }
   </style>
 </head>
 <body>
-  {{ content }}
+  <article>
+    {{ content }}
+  </article>
 </body>
 </html>
-
