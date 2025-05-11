@@ -167,6 +167,8 @@
       font-size: 1em;
       direction: ltr;
       text-align: left;
+      white-space: pre-wrap;
+      word-break: break-word;
     }
     blockquote {
       border-right: 5px solid #2563eb;
@@ -178,14 +180,20 @@
       font-style: italic;
       font-size: 1.08em;
       position: relative;
+      overflow-wrap: break-word;
+      word-break: break-word;
     }
     ul, ol {
       margin: 18px 0 18px 24px;
       padding: 0 20px;
+      max-width: 100%;
+      overflow-wrap: break-word;
+      word-break: break-word;
     }
     li {
       margin-bottom: 8px;
       line-height: 2;
+      word-break: break-word;
     }
     table {
       width: 100%;
@@ -193,14 +201,17 @@
       margin: 22px 0;
       background: #23232a;
       color: #e5e7eb;
-      table-layout: fixed;
+      table-layout: auto;
       word-wrap: break-word;
+      overflow-x: auto;
+      display: block;
     }
     th, td {
       border: 1px solid #30304a;
       padding: 10px 8px;
       text-align: center;
       vertical-align: middle;
+      word-break: break-word;
     }
     th {
       background: #18181b;
@@ -210,6 +221,7 @@
       color: #60a5fa;
       text-decoration: underline;
       transition: color 0.2s;
+      word-break: break-word;
     }
     a:hover {
       color: #fff;
@@ -219,9 +231,24 @@
       border-top: 1px solid #30304a;
       margin: 28px 0;
     }
+    /* الصور والعناصر داخل المحتوى متجاوبة */
+    .article-container img,
+    .article-container table,
+    .article-container pre,
+    .article-container blockquote,
+    .article-container ul,
+    .article-container ol {
+      max-width: 100%;
+      box-sizing: border-box;
+      overflow-wrap: break-word;
+      word-wrap: break-word;
+      word-break: break-word;
+    }
     @media (max-width: 600px) {
       .article-container {
-        max-width: 100vw;
+        max-width: 95vw;
+        width: 95vw;
+        padding: 12px 10px;
         border-radius: 12px;
       }
       .article-image-wrap {
@@ -248,7 +275,6 @@
   </style>
 </head>
 <body>
-  <!-- شريط المستخدم العلوي -->
   <header>
     <div class="profile">
       <img
@@ -265,7 +291,6 @@
     </nav>
   </header>
 
-  <!-- محتوى المقال -->
   <div class="article-container">
     {{ content }}
   </div>
