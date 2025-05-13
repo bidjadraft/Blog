@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>أخبار تلقائية من GitHub (ملفات MD مع front-matter)</title>
+  <title>مدونة بجاد الأثري</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"/>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;700&display=swap" rel="stylesheet"/>
   <style>
@@ -35,6 +35,12 @@
       align-items: center;
       gap: 12px;
     }
+    .profile a {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
     .profile-img {
       width: 44px;
       height: 44px;
@@ -58,6 +64,20 @@
       align-items: center;
       gap: 6px;
       user-select: none;
+    }
+    .username a {
+      color: #e5e7eb;
+      font-weight: 700;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .username a:hover,
+    .username a:focus {
+      color: #60a5fa;
+      outline: none;
+      text-decoration: none; /* إزالة الخط السفلي عند التمرير أو التركيز */
     }
     .username .blue {
       color: #60a5fa;
@@ -293,20 +313,26 @@
 <body>
   <header>
     <div class="profile">
-      <img
-        class="profile-img"
-        src="https://randomuser.me/api/portraits/men/32.jpg"
-        alt="Profile"
-      />
-      <div class="username"><span>بجاد</span> <span class="blue">الأثري</span></div>
+      <a href="https://bidjadraft.github.io/links" title="زيارة صفحة بجاد الأثري" aria-label="زيارة صفحة بجاد الأثري">
+        <img
+          class="profile-img"
+          src="https://i.imgur.com/zTwTusT.jpeg"
+          alt="Profile"
+        />
+      </a>
+      <div class="username">
+        <a href="https://bidjadraft.github.io/blog" title="زيارة صفحة بجاد الأثري" aria-label="زيارة صفحة بجاد الأثري">
+          <span>بجاد</span> <span class="blue">الأثري</span>
+        </a>
+      </div>
     </div>
     <nav aria-label="روابط التواصل الاجتماعي" class="socials">
-      <a href="#" title="GitHub" aria-label="GitHub"><i class="fab fa-github"></i></a>
-      <a href="#" title="يوتيوب" aria-label="يوتيوب"><i class="fab fa-youtube"></i></a>
-      <a href="#" title="تلغرام" aria-label="تلغرام"><i class="fab fa-telegram"></i></a>
+      <a href="https://github.com/bidjadraft" title="GitHub" aria-label="GitHub" target="_blank" rel="noopener noreferrer"><i class="fab fa-github"></i></a>
+      <a href="https://youtube.com/@bidjadraft" title="يوتيوب" aria-label="يوتيوب" target="_blank" rel="noopener noreferrer"><i class="fab fa-youtube"></i></a>
+      <a href="https://t.me/s/bidjadraft" title="تلغرام" aria-label="تلغرام" target="_blank" rel="noopener noreferrer"><i class="fab fa-telegram"></i></a>
     </nav>
   </header>
-  <main class="news-cards-container" id="news-cards-container" tabindex="-1" aria-live="polite" aria-label="أخبار تلقائية">
+  <main class="news-cards-container" id="news-cards-container" tabindex="-1" aria-live="polite" aria-label="مدونة بجاد الأثري">
     <!-- سيتم توليد الكروت تلقائياً هنا -->
   </main>
   <footer>
