@@ -12,13 +12,13 @@ date: 2025-05-13
 
    - افتح تطبيق تيليجرام وابحث عن بوت BotFather.  
 
-![screenshot1](https://www.dropbox.com/scl/fi/cainida0j0uh7bmrj9g8w/Group-80.png?rlkey=jjsevjx3m3d6szudih0ep07ld&st=n4k0os3s&raw=1)
+![screenshot1](https://www.dropbox.com/scl/fi/49zzhrbh2s21wj1dpuqjm/Group-80-1.png?rlkey=iqkn2pb4vk9hqvu00u3q9bn70&st=9oqvk8bd&raw=1)
 
 ---
 
 
    - ابدأ محادثة معه واضغط على "ابدأ" (Start).  
-![photo1](https://www.dropbox.com/scl/fi/7mpvyz2qarqmo3bnljxhx/Group-80-1.jpg?rlkey=hb7o3unkjcgg0xw1isy7hipil&st=329f5txf&raw=1)
+![photo1](https://www.dropbox.com/scl/fi/49zzhrbh2s21wj1dpuqjm/Group-80-1.png?rlkey=iqkn2pb4vk9hqvu00u3q9bn70&st=9oqvk8bd&raw=1)
 
 ---
 اكتب الأمر `/newbot` لإنشاء بوت جديد
