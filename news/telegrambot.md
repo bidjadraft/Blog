@@ -14,15 +14,16 @@ date: 2025-05-13
 ![screenshot1](https://www.dropbox.com/scl/fi/5uv35k9sdmdi0znrtin5q/Created-with-Grafika-10.png?rlkey=lpilfi05gkgc9cdma7setvdue&st=qxxlhfjd&raw=1)
 
 ---
+## أكمل الخطوات الآتية:
 
-4. أكتب اسم البوت بأي لغة تريد
+4. أكتب اسم البوت بأي لغة تريد 
 5. اكتب `username` للبوت بالإنجليزية:
    - يجب أن ينتهي ب `bot` أو `_bot`
    - يجب أن لا يكون مستخدما
 
 6. انسخ التوكن الخاص بالبوت عبر النقر عليه
 
-![photo1](https://www.dropbox.com/scl/fi/zj6b4bryr1qk98qhfm60x/Created-with-Grafika-11.png?rlkey=37ojkt8g61fajgibr57ru62wb&st=n1qcyy93&raw=1)
+![screenshot2](https://www.dropbox.com/scl/fi/zj6b4bryr1qk98qhfm60x/Created-with-Grafika-11.png?rlkey=37ojkt8g61fajgibr57ru62wb&st=n1qcyy93&raw=1)
 
 ---
 
