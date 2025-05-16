@@ -113,13 +113,11 @@
       display: flex;
       flex-direction: column;
     }
-    /* === تعديل مهم هنا === */
     .article-image-wrap {
       width: 100%;
       background: #23232a;
       position: relative;
       overflow: hidden;
-      /* احذف aspect-ratio */
     }
     .article-image {
       max-width: 100%;
@@ -128,8 +126,6 @@
       display: block;
       margin: 0 auto;
       border-radius: 12px;
-      /* احذف object-fit: cover; */
-      /* يمكن إضافة object-fit: contain; إذا أردت خلفية حول الصورة */
     }
     .article-content {
       padding: 22px 16px 18px 16px;
@@ -174,12 +170,25 @@
       margin-top: 8px;
       word-break: break-word;
     }
-    /* لجعل أي صورة داخل نص المقال متجاوبة */
-    .article-body img {
+    /* حاوية شفافة ثابتة الأبعاد حول صور المحتوى */
+    .article-body .img-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: transparent;
       max-width: 100%;
-      height: auto;
-      display: block;
+      max-height: 370px;
+      min-height: 220px;
+      overflow: hidden;
       margin: 18px auto;
+      border-radius: 10px;
+    }
+    /* ضبط الصور داخل الحاوية */
+    .article-body .img-container img {
+      max-width: 100%;
+      max-height: 370px;
+      object-fit: contain;
+      display: block;
       border-radius: 10px;
       box-shadow: 0 2px 8px #0004;
     }
@@ -286,6 +295,14 @@
       .article-content {
         padding: 14px 6px 12px 6px;
       }
+      .article-body .img-container {
+        min-height: 120px;
+        max-height: 210px;
+        margin: 12px auto;
+      }
+      .article-body .img-container img {
+        max-height: 210px;
+      }
     }
   </style>
 </head>
@@ -327,5 +344,17 @@
       </div>
     </div>
   </div>
+
+  <script>
+    // لف كل صور المحتوى داخل حاويات شفافة ثابتة الأبعاد
+    document.querySelectorAll('.article-body img').forEach(function(img) {
+      if (!img.parentElement.classList.contains('img-container')) {
+        var wrapper = document.createElement('div');
+        wrapper.className = 'img-container';
+        img.parentNode.insertBefore(wrapper, img);
+        wrapper.appendChild(img);
+      }
+    });
+  </script>
 </body>
 </html>
