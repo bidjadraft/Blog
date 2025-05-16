@@ -5,42 +5,35 @@ image: https://best-images.co/wp-content/uploads/2020/11/2444-1.jpeg.jpg
 category: 
 date: 2025-05-13
 ---
-## أولاً، ستحتاج للخطوات التالية:
+## ستحتاج للخطوات التالية:
 
-1. **إنشاء بوت تلغرام بواسطة [BotFather](https://t.me/BotFather):**  
+1. فتح التلغرام و البحث عن بوت Botfather
+2. أرسل الأمر `/start` للبدأ
+3. أرسل الأمر `/newbot` لإنشاء بوت جديد
 
-
-   - افتح تطبيق تيليجرام وابحث عن بوت BotFather.  
 
 ![screenshot1](https://www.dropbox.com/scl/fi/5uv35k9sdmdi0znrtin5q/Created-with-Grafika-10.png?rlkey=lpilfi05gkgc9cdma7setvdue&st=qxxlhfjd&raw=1)
 
 ---
 
-
-   - ابدأ محادثة معه واضغط على "ابدأ" (Start).
-
+4. أكتب اسم البوت بأي لغة تريد
+5. اكتب `username` للبوت بالإنجليزية:
+		- يجب أن ينتهي ب `bot` أو `_bot`
+		- يجب أن لا يكون مستخدما
+		
+6. انسخ التوكن الخاص بالبوت عبر النقر عليه
 
 ![photo1](https://www.dropbox.com/scl/fi/zj6b4bryr1qk98qhfm60x/Created-with-Grafika-11.png?rlkey=37ojkt8g61fajgibr57ru62wb&st=n1qcyy93&raw=1)
 
 ---
-اكتب الأمر `/newbot` لإنشاء بوت جديد
 
-![screenshot3](https://www.dropbox.com/scl/fi/gg7oknfpjy05jwf4o3knb/screenshot3.jpg?rlkey=qsybgtc7qn9fcrsrvkgiwamgo&st=xiliiq2u&raw=1)
 
----
+> [!note] 
+> تستطيع استخدام التوكن لربط البوت الخاص بك  بالعديد من الخدمات لكن أغلبها تتطلب برمجة مثل Python و Java و Html.
 
-   - اختر اسمًا للبوت واسم مستخدم ينتهي بـ "bot".  
-![screenshot4](https://www.dropbox.com/scl/fi/31x62uvbeb2co65alsu3p/screenshot4.jpg?rlkey=emisqhj65c4u088c5mznfg2ms&st=r0af2khj&raw=1)
+لكن مع ذلك يمكنك استخدام التوكن في بعض الخدمات التي لا تتطلب برمجة و التي تعتمد على روابط Api مثل:
+- بوت للتذكيرات اليومية عبر التوكن
+- بوت للأدعية و الأذكار عبر التوكن
+- ربط البوت ببعض الخدمات عبر التوكن
 
----
-
-![screenshot5](https://www.dropbox.com/scl/fi/r038mdcopax7i0it3dsq3/screenshot5.jpg?rlkey=vxzdd4d6agonjx8semgy793t8&st=wk8zy93z&raw=1)
-
----
-
-![screenshot6](https://www.dropbox.com/scl/fi/s9fsgtqmbnfhj8eh5mlus/screenshot6.jpg?rlkey=vpywcn7xb9x814510swo8yb3q&st=1zlz52uj&raw=1)
-   
-   
-   بعد الانتهاء، ستحصل على رمز API الخاص بالبوت، احفظه جيدًا لاستخدامه لاحقًا.  
-   
-هذه الخطوات تمكنك من إنشاء بوت تلغرام خاص بك يمكن ربطه بموقعك أو صفحتك على sarihni لتخصيصها حسب رغبتك.
+**إذا كنت تريد مثالا بدون برمجة [شاهد هنا](https://www.youtube.com/watch?v=C_8Dc8WGssg)**
