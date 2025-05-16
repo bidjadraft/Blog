@@ -18,7 +18,7 @@ date: 2025-05-13
 
 
    - ابدأ محادثة معه واضغط على "ابدأ" (Start).  
-![photo1](https://www.dropbox.com/scl/fi/49zzhrbh2s21wj1dpuqjm/Group-80-1.png?rlkey=iqkn2pb4vk9hqvu00u3q9bn70&st=9oqvk8bd&raw=1)
+![photo1](https://www.dropbox.com/scl/fi/zhspszhcz7bugbibzirab/Created-with-Grafika.webp?rlkey=zho6mwia09sh341fegkvle0z5&st=7f47exgf&raw=)
 
 ---
 اكتب الأمر `/newbot` لإنشاء بوت جديد
