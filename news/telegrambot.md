@@ -12,7 +12,7 @@ date: 2025-05-13
 
    - افتح تطبيق تيليجرام وابحث عن بوت BotFather.  
 
-![screenshot1](https://www.dropbox.com/scl/fi/0tx5kcv64jk41g8xku4xi/Group-93.png?rlkey=o0b7kvf8ho8zmxshtguzcr4wj&st=y9x12ura&raw=1)
+![screenshot1](https://www.dropbox.com/scl/fi/a9ggfikxus5oyvpqf29bb/Created-with-Grafika-9.png?rlkey=amfuaob47hjnilatb19rpxj3m&st=igk36bcu&raw=1)
 
 ---
 
