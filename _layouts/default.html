@@ -108,7 +108,7 @@
       margin: 24px auto 0 auto;
       background: #23232a;
       border-radius: 18px;
-      box-shadow: none; /* إزالة الظل كلياً */
+      box-shadow: none;
       overflow: hidden;
       display: flex;
       flex-direction: column;
@@ -170,7 +170,6 @@
       margin-top: 8px;
       word-break: break-word;
     }
-    /* حاوية شفافة ثابتة الأبعاد حول صور المحتوى */
     .article-body .img-container {
       display: flex;
       justify-content: center;
@@ -182,9 +181,8 @@
       overflow: hidden;
       margin: 24px auto;
       border-radius: 10px;
-      box-shadow: none; /* إزالة الظل كلياً */
+      box-shadow: none;
     }
-    /* ضبط الصور داخل الحاوية */
     .article-body .img-container img {
       max-width: 100%;
       max-height: 500px;
@@ -192,6 +190,20 @@
       display: block;
       border-radius: 10px;
       box-shadow: 0 2px 8px #0004;
+    }
+    /* دعم ترقيم القوائم من رقم معين */
+    ol {
+      counter-reset: list-item;
+      margin: 18px 0 18px 24px;
+      padding: 0 20px;
+      max-width: 100%;
+      overflow-wrap: break-word;
+      word-break: break-word;
+    }
+    ol li {
+      margin-bottom: 8px;
+      line-height: 2;
+      word-break: break-word;
     }
     code {
       background: #18181b;
