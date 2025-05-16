@@ -1,7 +1,7 @@
 ---
 layout: default
 title: كيفية إنشاء بوت تلغرام و الحصول على التوكن الخاص بالبوت
-image: https://www.dropbox.com/scl/fi/y7nz2zqyrq7o0i6rr8pyz/Como-Criar-Um-Bot-No-Telegram-BotFather.jpg?rlkey=ahks6tyl6t2hxk4sg1hgv6wwk&st=5oqo8hl5&raw=1
+image: https://i.imgur.com/WfmUA0d.jpeg
 category: Telegram
 date: 2025-05-13
 ---
