@@ -21,8 +21,8 @@ date: 2025-05-13
 
    - يجب أن ينتهي ب `bot` أو `_bot`
    - يجب أن لا يكون مستخدما
-		
-6.انسخ التوكن الخاص بالبوت عبر النقر عليه
+
+6. انسخ التوكن الخاص بالبوت عبر النقر عليه
 
 ![photo1](https://www.dropbox.com/scl/fi/zj6b4bryr1qk98qhfm60x/Created-with-Grafika-11.png?rlkey=37ojkt8g61fajgibr57ru62wb&st=n1qcyy93&raw=1)
 
