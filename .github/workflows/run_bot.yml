@@ -2,35 +2,38 @@ name: Run Telegram Bot
 
 on:
   schedule:
-    - cron: '0 * * * *'
-  workflow_dispatch:
+    - cron: '0 * * * *'   # يشغل البوت كل ساعة
+  workflow_dispatch:        # يسمح بالتشغيل اليدوي
+
+permissions:
+  contents: write           # ضروري حتى يسمح بالـ push
 
 jobs:
   run-bot:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: Setup Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.10'
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
 
-    - name: Install dependencies
-      run: pip install -r requirements.txt
+      - name: Install dependencies
+        run: pip install -r requirements.txt
 
-    - name: Run bot script
-      env:
-        TOKEN: ${{ secrets.TOKEN }}
-        CHANNEL_ID: ${{ secrets.CHANNEL_ID }}
-        GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-      run: python main.py
+      - name: Run bot script
+        env:
+          TOKEN: ${{ secrets.TOKEN }}
+          CHANNEL_ID: ${{ secrets.CHANNEL_ID }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: python main.py
 
-    - name: Commit last_sent_id.txt if changed
-      run: |
-        git config --global user.name "github-actions[bot]"
-        git config --global user.email "github-actions[bot]@users.noreply.github.com"
-        git add last_sent_id.txt
-        git diff --cached --quiet || git commit -m "Update last_sent_id.txt"
-        git push
+      - name: Commit last_sent_id.txt if changed
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add last_sent_id.txt
+          git diff --cached --quiet || git commit -m "Update last_sent_id.txt"
+          git push
