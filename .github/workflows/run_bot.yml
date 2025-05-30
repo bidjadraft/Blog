@@ -2,7 +2,7 @@ name: Run Telegram Bot
 
 on:
   schedule:
-    - cron: '0 * * * *'  # كل ساعة
+    - cron: '0 * * * *'
   workflow_dispatch:
 
 jobs:
@@ -26,3 +26,11 @@ jobs:
         CHANNEL_ID: ${{ secrets.CHANNEL_ID }}
         GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
       run: python main.py
+
+    - name: Commit last_sent_id.txt if changed
+      run: |
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        git add last_sent_id.txt
+        git diff --cached --quiet || git commit -m "Update last_sent_id.txt"
+        git push
