@@ -3,6 +3,7 @@ import feedparser
 import requests
 from telegram import Bot
 import os
+import time
 
 # إعدادات البوت والقناة
 TOKEN = os.getenv("TOKEN")
@@ -21,7 +22,7 @@ def write_last_sent_id(post_id):
     with open(LAST_ID_FILE, "w") as f:
         f.write(post_id)
 
-def summarize_with_gemini(text):
+def summarize_with_gemini(text, max_retries=10, wait_seconds=10):
     url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={GEMINI_API_KEY}"
     prompt = f"لخص النص في فقرة قصيرة بالعربية:\n{text}"
     payload = {
@@ -34,15 +35,26 @@ def summarize_with_gemini(text):
         ]
     }
     headers = {'Content-Type': 'application/json'}
-    response = requests.post(url, json=payload, headers=headers)
-    if response.status_code == 200:
-        data = response.json()
-        try:
-            return data['candidates'][0]['content']['parts'][0]['text']
-        except Exception:
-            return "حدث خطأ أثناء استخراج الملخص من Gemini."
-    else:
-        return f"حدث خطأ في الاتصال بـ Gemini: {response.text}"
+
+    for attempt in range(max_retries):
+        response = requests.post(url, json=payload, headers=headers)
+        if response.status_code == 200:
+            data = response.json()
+            try:
+                return data['candidates'][0]['content']['parts'][0]['text']
+            except Exception:
+                return None  # فشل استخراج الملخص
+        else:
+            # إذا كان الخطأ 503 (الخدمة مزدحمة)، أعد المحاولة
+            if response.status_code == 503 or "overloaded" in response.text:
+                print(f"محاولة {attempt+1} فشلت بسبب ازدحام الخدمة. إعادة المحاولة بعد {wait_seconds} ثانية...")
+                time.sleep(wait_seconds)
+            else:
+                print(f"حدث خطأ آخر في الاتصال بـ Gemini: {response.text}")
+                return None  # أخطاء أخرى لا تعيد المحاولة
+
+    print("فشلت كل المحاولات مع Gemini.")
+    return None  # إذا لم تنجح أي محاولة
 
 async def send_photo_with_caption(bot, photo_url, caption):
     MAX_CAPTION_LENGTH = 1000
@@ -101,6 +113,10 @@ async def main():
             photo_url = "https://via.placeholder.com/600x400.png?text=No+Image"
 
         summary = summarize_with_gemini(description)
+        if summary is None:
+            print("لم يتم إرسال المنشور بسبب فشل التلخيص في كل المحاولات.")
+            continue  # لا ترسل شيئًا إذا فشل التلخيص
+
         print(f"إرسال منشور: {post_id}")
         print("الملخص:\n", summary)
 
