@@ -137,7 +137,7 @@ def main():
             print("فشل إعادة صياغة المقال، تجاهل المنشور.")
             continue
 
-        category = "التقنية"  # التصنيف ثابت
+        category = "التقنية"  # التصنيف ثابت لجميع المقالات
 
         md_file, url = save_markdown(
             title=title_ar,
