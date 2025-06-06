@@ -85,6 +85,7 @@ def save_markdown(title, image_url, category, date, content):
     if file_exists(md_filename):
         print(f"الملف موجود مسبقًا: {md_filename}")
         return None, None
+    # ضبط permalink مع baseurl /blog و مجلد news
     front_matter = f"""---
 layout: default
 title: {title}
