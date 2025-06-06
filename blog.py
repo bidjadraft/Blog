@@ -58,26 +58,15 @@ def gemini_request(prompt, max_retries=10, wait_seconds=10):
     print("فشلت كل المحاولات مع Gemini.")
     return None
 
-def gemini_extract_title(article_text):
+def gemini_generate_title_and_summary(article_text):
     prompt = (
-        "استخرج عنوانًا احترافيًا بالعربية لهذا المقال، مختصر ومعبر، يتراوح طوله بين 7 إلى 12 كلمة، "
-        "بدون استخدام علامات ترقيم مثل النقطتين أو الشرطتين. "
-        "أعطني العنوان فقط بدون شرح أو خيارات إضافية:\n"
+        "اكتب عنوانًا احترافيًا ومختصرًا باللغة العربية لهذا المقال، "
+        "ثم أكتب ملخصًا لا يتجاوز فقرتين فقط، يعبر بدقة عن محتوى المقال. "
+        "ابدأ بالعنوان في السطر الأول، ثم ضع الملخص في السطر الثاني، بدون أي إضافات أو شرح.\n\n"
         f"{article_text}"
     )
-    title = gemini_request(prompt)
-    if title:
-        title = title.replace(":", "").replace("–", "").replace("-", "").strip()
-    return title
-
-def gemini_paraphrase_article(article_text):
-    prompt = (
-        "أعد صياغة هذا المقال إلى العربية بتعبير مختلف واحترافي مع الحفاظ على المعنى، "
-        "مع تقديم ملخص أطول وأكثر تفصيلاً، مناسب للنشر. "
-        "أعطني نصًا واحدًا فقط بدون شرح أو خيارات إضافية:\n"
-        f"{article_text}"
-    )
-    return gemini_request(prompt)
+    response = gemini_request(prompt)
+    return response
 
 def save_markdown(title, image_url, category, date, content):
     file_slug = slugify(title)
@@ -98,7 +87,6 @@ date: {date}
     with open(md_filename, "w", encoding="utf-8") as f:
         f.write(front_matter)
     print(f"تم إنشاء الملف: {md_filename}")
-    # الرابط الافتراضي يعتمد على إعدادات Jekyll (baseurl + تاريخ + slug)
     url = f"https://bidjadraft.github.io/blog/{date}/{file_slug}.html"
     return md_filename, url
 
@@ -111,7 +99,6 @@ def main():
         return
 
     for entry in entries[:5]:  # عدّل العدد حسب رغبتك
-        original_title = entry.get('title', '')
         description = entry.get('summary', '')
         pub_date_raw = entry.get('published', datetime.now().strftime('%a, %d %b %Y %H:%M:%S +0000'))
         try:
@@ -127,24 +114,23 @@ def main():
         if not image_url:
             image_url = "https://via.placeholder.com/600x400.png?text=No+Image"
 
-        title_ar = gemini_extract_title(original_title)
-        if not title_ar:
-            print("فشل استخلاص العنوان، تجاهل المنشور.")
+        result = gemini_generate_title_and_summary(description)
+        if not result:
+            print("فشل توليد العنوان والملخص، تجاهل المنشور.")
             continue
 
-        article_ar = gemini_paraphrase_article(description)
-        if not article_ar:
-            print("فشل إعادة صياغة المقال، تجاهل المنشور.")
-            continue
+        lines = result.split('\n', 1)
+        title = lines[0].strip()
+        summary = lines[1].strip() if len(lines) > 1 else ""
 
         category = "التقنية"  # التصنيف ثابت
 
         md_file, url = save_markdown(
-            title=title_ar,
+            title=title,
             image_url=image_url,
             category=category,
             date=pub_date,
-            content=article_ar
+            content=summary
         )
         if md_file:
             print(f"رابط المقال: {url}")
