@@ -68,6 +68,25 @@ def gemini_generate_title_and_summary(article_text):
     response = gemini_request(prompt)
     return response
 
+def extract_image_url(entry):
+    if 'media_content' in entry and len(entry.media_content) > 0:
+        url = entry.media_content[0].get('url')
+        if url and url.startswith('http'):
+            return url
+    if 'enclosures' in entry and len(entry.enclosures) > 0:
+        url = entry.enclosures[0].get('url')
+        if url and url.startswith('http'):
+            return url
+    if 'media_thumbnail' in entry and len(entry.media_thumbnail) > 0:
+        url = entry.media_thumbnail[0].get('url')
+        if url and url.startswith('http'):
+            return url
+    imgs = re.findall(r'<img[^>]+src="([^">]+)"', entry.get('summary', ''))
+    for img_url in imgs:
+        if img_url.startswith('http'):
+            return img_url
+    return "https://via.placeholder.com/600x400.png?text=No+Image"
+
 def save_markdown(title, image_url, category, date, content):
     file_slug = slugify(title)
     md_filename = f"{NEWS_FOLDER}/{date}-{file_slug}.md"
@@ -98,7 +117,7 @@ def main():
         print("لا توجد منشورات في الخلاصة.")
         return
 
-    for entry in entries[:5]:  # عدّل العدد حسب رغبتك
+    for entry in entries[:5]:
         description = entry.get('summary', '')
         pub_date_raw = entry.get('published', datetime.now().strftime('%a, %d %b %Y %H:%M:%S +0000'))
         try:
@@ -106,13 +125,7 @@ def main():
         except Exception:
             pub_date = datetime.now().date().isoformat()
 
-        image_url = None
-        if 'media_content' in entry and len(entry.media_content) > 0:
-            image_url = entry.media_content[0]['url']
-        elif 'enclosures' in entry and len(entry.enclosures) > 0:
-            image_url = entry.enclosures[0]['url']
-        if not image_url:
-            image_url = "https://via.placeholder.com/600x400.png?text=No+Image"
+        image_url = extract_image_url(entry)
 
         result = gemini_generate_title_and_summary(description)
         if not result:
@@ -123,7 +136,7 @@ def main():
         title = lines[0].strip()
         summary = lines[1].strip() if len(lines) > 1 else ""
 
-        category = "التقنية"  # التصنيف ثابت
+        category = "التقنية"
 
         md_file, url = save_markdown(
             title=title,
