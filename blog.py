@@ -72,10 +72,10 @@ def save_markdown(title, image_url, category, date, content):
     if file_exists(md_filename):
         print(f"الملف موجود مسبقًا: {md_filename}")
         return None, None
-    # ضع رابط الصورة بين علامات اقتباس لتجنب مشاكل YAML
+    # ضع العنوان ورابط الصورة بين علامات اقتباس مزدوجة لتجنب مشاكل YAML
     front_matter = f"""---
 layout: default
-title: {title}
+title: "{title}"
 image: "{image_url}"
 category: {category}
 date: {date}
