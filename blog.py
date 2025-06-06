@@ -20,27 +20,6 @@ def create_news_folder():
 def file_exists(filename):
     return os.path.exists(filename)
 
-def save_markdown(title, image_url, category, date, content):
-    file_slug = slugify(title)
-    md_filename = f"{NEWS_FOLDER}/{date}-{file_slug}.md"
-    if file_exists(md_filename):
-        print(f"الملف موجود مسبقًا: {md_filename}")
-        return False
-    front_matter = f"""---
-layout: default
-title: {title}
-image: {image_url}
-category: {category}
-date: {date}
----
-
-{content}
-"""
-    with open(md_filename, "w", encoding="utf-8") as f:
-        f.write(front_matter)
-    print(f"تم إنشاء الملف: {md_filename}")
-    return True
-
 def gemini_request(prompt, max_retries=10, wait_seconds=10):
     url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={GEMINI_API_KEY}"
     payload = {
@@ -88,7 +67,6 @@ def gemini_extract_title(article_text):
     )
     title = gemini_request(prompt)
     if title:
-        # تنظيف إضافي
         title = title.replace(":", "").replace("–", "").replace("-", "").strip()
     return title
 
@@ -100,6 +78,46 @@ def gemini_paraphrase_article(article_text):
         f"{article_text}"
     )
     return gemini_request(prompt)
+
+def gemini_detect_category(article_text):
+    categories = ["ذكاء اصطناعي", "موقع", "تطبيق", "خدمة", "خبر", "عرض", "تقنية", "أخبار عامة"]
+    prompt = (
+        "حدد تصنيفًا مناسبًا واحدًا فقط من القائمة التالية لهذا المقال بالعربية:\n"
+        f"{', '.join(categories)}\n"
+        "المقال:\n"
+        f"{article_text}\n"
+        "أعطني التصنيف فقط بدون شرح أو كلمات إضافية."
+    )
+    category = gemini_request(prompt)
+    if category:
+        category = category.strip()
+        if category not in categories:
+            category = "أخبار عامة"
+        return category
+    return "أخبار عامة"
+
+def save_markdown(title, image_url, category, date, content):
+    file_slug = slugify(title)
+    md_filename = f"{NEWS_FOLDER}/{date}-{file_slug}.md"
+    if file_exists(md_filename):
+        print(f"الملف موجود مسبقًا: {md_filename}")
+        return None, None
+    front_matter = f"""---
+layout: default
+title: {title}
+image: {image_url}
+category: {category}
+date: {date}
+permalink: /blog/news/{date}-{file_slug}/
+---
+
+{content}
+"""
+    with open(md_filename, "w", encoding="utf-8") as f:
+        f.write(front_matter)
+    print(f"تم إنشاء الملف: {md_filename}")
+    url = f"https://bidjadraft.github.io/blog/news/{date}-{file_slug}/"
+    return md_filename, url
 
 def main():
     create_news_folder()
@@ -115,13 +133,11 @@ def main():
         original_title = entry.get('title', '')
         description = entry.get('summary', '')
         pub_date_raw = entry.get('published', datetime.now().strftime('%a, %d %b %Y %H:%M:%S +0000'))
-        # تحويل التاريخ لصيغة YYYY-MM-DD
         try:
             pub_date = datetime.strptime(pub_date_raw, '%a, %d %b %Y %H:%M:%S %z').date().isoformat()
         except Exception:
             pub_date = datetime.now().date().isoformat()
 
-        # صورة المقال
         image_url = None
         if 'media_content' in entry and len(entry.media_content) > 0:
             image_url = entry.media_content[0]['url']
@@ -130,32 +146,28 @@ def main():
         if not image_url:
             image_url = "https://via.placeholder.com/600x400.png?text=No+Image"
 
-        # تصنيف افتراضي - يمكنك تعديله حسب الحاجة
-        category = "News"
-
-        # استخلاص العنوان
-        print("جاري استخلاص العنوان من عنوان المقال الأصلي...")
         title_ar = gemini_extract_title(original_title)
         if not title_ar:
             print("فشل استخلاص العنوان، تجاهل المنشور.")
             continue
 
-        # إعادة صياغة المقال (الملخص)
-        print("جاري إعادة صياغة المقال...")
         article_ar = gemini_paraphrase_article(description)
         if not article_ar:
             print("فشل إعادة صياغة المقال، تجاهل المنشور.")
             continue
 
-        # حفظ المقال كملف Markdown
-        saved = save_markdown(
+        category = gemini_detect_category(description or original_title)
+
+        md_file, url = save_markdown(
             title=title_ar,
             image_url=image_url,
             category=category,
             date=pub_date,
             content=article_ar
         )
-        if not saved:
+        if md_file:
+            print(f"رابط المقال: {url}")
+        else:
             print("تخطى المقال لأنه موجود مسبقًا.")
 
 if __name__ == "__main__":
