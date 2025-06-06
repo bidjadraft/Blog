@@ -6,7 +6,7 @@ import re
 from datetime import datetime
 
 RSS_URL = "https://feed.alternativeto.net/news/all"
-GEMINI_API_KEY = "AIzaSyBWmO0VrIL5HbU3RFPRRMmlDFBisoSAt2s"  # ضع مفتاح API الخاص بك هنا
+GEMINI_API_KEY = "AIzaSyBWmO0VrIL5HbU3RFPRRMmlDFBisoSAt2s"  # استبدل بمفتاح API الخاص بك
 NEWS_FOLDER = "news"
 
 def slugify(text):
@@ -43,8 +43,7 @@ def gemini_request(prompt, max_retries=10, wait_seconds=10):
 
         if response.status_code == 200:
             try:
-                answer = data['candidates'][0]['content']['parts'][0]['text']
-                return answer.strip()
+                return data['candidates'][0]['content']['parts'][0]['text'].strip()
             except Exception:
                 print("لم يتم العثور على نص في الرد.")
                 return None
@@ -65,8 +64,7 @@ def gemini_generate_title_and_summary(article_text):
         "ابدأ بالعنوان في السطر الأول، ثم ضع الملخص في السطر الثاني، بدون أي إضافات أو شرح.\n\n"
         f"{article_text}"
     )
-    response = gemini_request(prompt)
-    return response
+    return gemini_request(prompt)
 
 def extract_image_url(entry):
     if 'media_content' in entry and len(entry.media_content) > 0:
@@ -117,7 +115,7 @@ def main():
         print("لا توجد منشورات في الخلاصة.")
         return
 
-    for entry in entries[:5]:
+    for entry in entries[:5]:  # عدّل العدد حسب رغبتك
         description = entry.get('summary', '')
         pub_date_raw = entry.get('published', datetime.now().strftime('%a, %d %b %Y %H:%M:%S +0000'))
         try:
