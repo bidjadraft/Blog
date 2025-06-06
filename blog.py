@@ -6,7 +6,7 @@ import re
 from datetime import datetime
 
 RSS_URL = "https://feed.alternativeto.net/news/all"
-GEMINI_API_KEY = "AIzaSyBWmO0VrIL5HbU3RFPRRMmlDFBisoSAt2s"  # استبدل بمفتاح API الخاص بك
+GEMINI_API_KEY = "AIzaSyBWmO0VrIL5HbU3RFPRRMmlDFBisoSAt2s"  # ضع مفتاح API الخاص بك هنا
 NEWS_FOLDER = "news"
 
 def slugify(text):
@@ -43,7 +43,8 @@ def gemini_request(prompt, max_retries=10, wait_seconds=10):
 
         if response.status_code == 200:
             try:
-                return data['candidates'][0]['content']['parts'][0]['text'].strip()
+                answer = data['candidates'][0]['content']['parts'][0]['text']
+                return answer.strip()
             except Exception:
                 print("لم يتم العثور على نص في الرد.")
                 return None
@@ -65,25 +66,6 @@ def gemini_generate_title_and_summary(article_text):
         f"{article_text}"
     )
     return gemini_request(prompt)
-
-def extract_image_url(entry):
-    if 'media_content' in entry and len(entry.media_content) > 0:
-        url = entry.media_content[0].get('url')
-        if url and url.startswith('http'):
-            return url
-    if 'enclosures' in entry and len(entry.enclosures) > 0:
-        url = entry.enclosures[0].get('url')
-        if url and url.startswith('http'):
-            return url
-    if 'media_thumbnail' in entry and len(entry.media_thumbnail) > 0:
-        url = entry.media_thumbnail[0].get('url')
-        if url and url.startswith('http'):
-            return url
-    imgs = re.findall(r'<img[^>]+src="([^">]+)"', entry.get('summary', ''))
-    for img_url in imgs:
-        if img_url.startswith('http'):
-            return img_url
-    return "https://via.placeholder.com/600x400.png?text=No+Image"
 
 def save_markdown(title, image_url, category, date, content):
     file_slug = slugify(title)
@@ -123,7 +105,14 @@ def main():
         except Exception:
             pub_date = datetime.now().date().isoformat()
 
-        image_url = extract_image_url(entry)
+        # تعيين الصورة كما في النسخة الأصلية
+        image_url = None
+        if 'media_content' in entry and len(entry.media_content) > 0:
+            image_url = entry.media_content[0]['url']
+        elif 'enclosures' in entry and len(entry.enclosures) > 0:
+            image_url = entry.enclosures[0]['url']
+        if not image_url:
+            image_url = "https://via.placeholder.com/600x400.png?text=No+Image"
 
         result = gemini_generate_title_and_summary(description)
         if not result:
