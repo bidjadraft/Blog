@@ -85,14 +85,12 @@ def save_markdown(title, image_url, category, date, content):
     if file_exists(md_filename):
         print(f"الملف موجود مسبقًا: {md_filename}")
         return None, None
-    # ضبط permalink مع baseurl /blog و مجلد news
     front_matter = f"""---
 layout: default
 title: {title}
 image: {image_url}
 category: {category}
 date: {date}
-permalink: /blog/news/{date}-{file_slug}/
 ---
 
 {content}
@@ -100,7 +98,8 @@ permalink: /blog/news/{date}-{file_slug}/
     with open(md_filename, "w", encoding="utf-8") as f:
         f.write(front_matter)
     print(f"تم إنشاء الملف: {md_filename}")
-    url = f"https://bidjadraft.github.io/blog/news/{date}-{file_slug}/"
+    # الرابط الافتراضي يعتمد على إعدادات Jekyll (baseurl + تاريخ + slug)
+    url = f"https://bidjadraft.github.io/blog/{date}/{file_slug}.html"
     return md_filename, url
 
 def main():
@@ -138,7 +137,7 @@ def main():
             print("فشل إعادة صياغة المقال، تجاهل المنشور.")
             continue
 
-        category = "التقنية"  # التصنيف ثابت لجميع المقالات
+        category = "التقنية"  # التصنيف ثابت
 
         md_file, url = save_markdown(
             title=title_ar,
