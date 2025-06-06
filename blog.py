@@ -67,8 +67,10 @@ def gemini_generate_title_and_summary(article_text):
     return gemini_request(prompt)
 
 def clean_title(title):
-    # إزالة رموز ** و * من العنوان
-    title = title.replace("**", "").replace("*", "")
+    # إزالة علامات اقتباس وأي رموز غير الحروف والأرقام والمسافات والواصلات
+    title = title.replace('"', '').replace("'", '')
+    # إزالة أي رموز غير الحروف العربية أو الإنجليزية أو الأرقام أو المسافات أو الواصلات
+    title = re.sub(r'[^\w\s\-ء-ي]', '', title, flags=re.UNICODE)
     return title.strip()
 
 def save_markdown(title, image_url, category, date, content):
@@ -77,9 +79,10 @@ def save_markdown(title, image_url, category, date, content):
     if file_exists(md_filename):
         print(f"الملف موجود مسبقًا: {md_filename}")
         return None, None
+    # لا نستخدم علامات اقتباس في العنوان
     front_matter = f"""---
 layout: default
-title: "{title}"
+title: {title}
 image: "{image_url}"
 category: {category}
 date: {date}
