@@ -6,7 +6,7 @@ import re
 from datetime import datetime
 
 RSS_URL = "https://feed.alternativeto.net/news/all"
-GEMINI_API_KEY = "AIzaSyBWmO0VrIL5HbU3RFPRRMmlDFBisoSAt2s"  # ضع مفتاح API الخاص بك هنا
+GEMINI_API_KEY = "AIzaSyBWmO0VrIL5HbU3RFPRRMmlDFBisoSAt2s"  # استبدل بمفتاح API الخاص بك
 NEWS_FOLDER = "news"
 
 def slugify(text):
@@ -43,8 +43,7 @@ def gemini_request(prompt, max_retries=10, wait_seconds=10):
 
         if response.status_code == 200:
             try:
-                answer = data['candidates'][0]['content']['parts'][0]['text']
-                return answer.strip()
+                return data['candidates'][0]['content']['parts'][0]['text'].strip()
             except Exception:
                 print("لم يتم العثور على نص في الرد.")
                 return None
@@ -105,7 +104,6 @@ def main():
         except Exception:
             pub_date = datetime.now().date().isoformat()
 
-        # تعيين الصورة كما في النسخة الأصلية
         image_url = None
         if 'media_content' in entry and len(entry.media_content) > 0:
             image_url = entry.media_content[0]['url']
