@@ -79,22 +79,32 @@ def gemini_paraphrase_article(article_text):
     )
     return gemini_request(prompt)
 
-def gemini_detect_category(article_text):
-    categories = ["ذكاء اصطناعي", "موقع", "تطبيق", "خدمة", "خبر", "عرض", "تقنية", "أخبار عامة"]
+def gemini_detect_category(description_text):
+    categories = [
+        "تطبيقات",
+        "برامج",
+        "منصات",
+        "خدمات",
+        "أنظمة",
+        "تحديثات",
+        "أخبار"
+    ]
     prompt = (
-        "حدد تصنيفًا مناسبًا واحدًا فقط من القائمة التالية لهذا المقال بالعربية:\n"
+        "اختر تصنيفًا واحدًا فقط من القائمة التالية يناسب هذا النص باللغة العربية، "
+        "التصنيف يجب أن يكون مطابقًا تمامًا لأحد التصنيفات التالية:\n"
         f"{', '.join(categories)}\n"
-        "المقال:\n"
-        f"{article_text}\n"
-        "أعطني التصنيف فقط بدون شرح أو كلمات إضافية."
+        "النص:\n"
+        f"{description_text}\n"
+        "أعطني التصنيف فقط بدون شرح أو كلمات إضافية. "
+        "إذا لم يكن النص مناسبًا لأي تصنيف، اكتب 'غير محدد'."
     )
     category = gemini_request(prompt)
     if category:
         category = category.strip()
         if category not in categories:
-            category = "أخبار عامة"
+            category = "غير محدد"
         return category
-    return "أخبار عامة"
+    return "غير محدد"
 
 def save_markdown(title, image_url, category, date, content):
     file_slug = slugify(title)
@@ -128,8 +138,6 @@ def main():
         return
 
     for entry in entries[:5]:  # عدّل العدد حسب رغبتك
-        post_id = entry.get('id') or entry.get('link')
-        link = entry.get('link', '')
         original_title = entry.get('title', '')
         description = entry.get('summary', '')
         pub_date_raw = entry.get('published', datetime.now().strftime('%a, %d %b %Y %H:%M:%S +0000'))
