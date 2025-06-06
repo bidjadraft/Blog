@@ -3,7 +3,7 @@ import requests
 import os
 import time
 import re
-from datetime import datetime
+from datetime import datetime, timezone
 
 RSS_URL = "https://feed.alternativeto.net/news/all"
 GEMINI_API_KEY = "AIzaSyBWmO0VrIL5HbU3RFPRRMmlDFBisoSAt2s"  # استبدل بمفتاح API الخاص بك
@@ -69,23 +69,90 @@ def gemini_generate_title_and_summary(article_text):
 def clean_title(title):
     # إزالة علامات اقتباس وأي رموز غير الحروف والأرقام والمسافات والواصلات
     title = title.replace('"', '').replace("'", '')
-    # إزالة أي رموز غير الحروف العربية أو الإنجليزية أو الأرقام أو المسافات أو الواصلات
     title = re.sub(r'[^\w\s\-ء-ي]', '', title, flags=re.UNICODE)
     return title.strip()
 
-def save_markdown(title, image_url, category, date, content):
+def time_ago(published_iso):
+    try:
+        published = datetime.fromisoformat(published_iso)
+    except Exception:
+        try:
+            published = datetime.strptime(published_iso, '%a, %d %b %Y %H:%M:%S %z')
+        except Exception:
+            return "غير معروف"
+    now = datetime.now(timezone.utc)
+    if published.tzinfo is None:
+        published = published.replace(tzinfo=timezone.utc)
+    diff = now - published
+    seconds = diff.total_seconds()
+    minutes = seconds / 60
+    hours = minutes / 60
+    days = hours / 24
+    weeks = days / 7
+    months = days / 30
+    years = days / 365
+
+    if seconds < 10:
+        return "الآن"
+    elif seconds < 60:
+        return f"قبل {int(seconds)} ثانية"
+    elif minutes < 60:
+        m = int(minutes)
+        if m == 1:
+            return "قبل دقيقة"
+        elif 2 <= m <= 10:
+            return f"قبل {m} دقائق"
+        else:
+            return f"قبل {m} دقيقة"
+    elif hours < 24:
+        h = int(hours)
+        if h == 1:
+            return "قبل ساعة"
+        elif 2 <= h <= 10:
+            return f"قبل {h} ساعات"
+        else:
+            return f"قبل {h} ساعة"
+    elif days < 7:
+        d = int(days)
+        if d == 1:
+            return "قبل يوم"
+        elif d == 2:
+            return "قبل يومين"
+        elif 3 <= d <= 10:
+            return f"قبل {d} أيام"
+        else:
+            return f"قبل {d} يوم"
+    elif weeks < 5:
+        w = int(weeks)
+        if w == 1:
+            return "قبل أسبوع"
+        else:
+            return f"قبل {w} أسابيع"
+    elif months < 12:
+        mo = int(months)
+        if mo == 1:
+            return "قبل شهر"
+        else:
+            return f"قبل {mo} أشهر"
+    else:
+        y = int(years)
+        if y == 1:
+            return "قبل سنة"
+        else:
+            return f"قبل {y} سنوات"
+
+def save_markdown(title, image_url, category, time_relative, content):
     file_slug = slugify(title)
-    md_filename = f"{NEWS_FOLDER}/{date}-{file_slug}.md"
+    md_filename = f"{NEWS_FOLDER}/{file_slug}.md"
     if file_exists(md_filename):
         print(f"الملف موجود مسبقًا: {md_filename}")
         return None, None
-    # لا نستخدم علامات اقتباس في العنوان
     front_matter = f"""---
 layout: default
 title: {title}
 image: "{image_url}"
 category: {category}
-date: {date}
+date: {time_relative}
 ---
 
 {content}
@@ -93,7 +160,7 @@ date: {date}
     with open(md_filename, "w", encoding="utf-8") as f:
         f.write(front_matter)
     print(f"تم إنشاء الملف: {md_filename}")
-    url = f"https://bidjadraft.github.io/blog/{date}/{file_slug}.html"
+    url = f"https://bidjadraft.github.io/blog/{file_slug}.html"
     return md_filename, url
 
 def main():
@@ -106,11 +173,9 @@ def main():
 
     for entry in entries[:5]:  # عدّل العدد حسب رغبتك
         description = entry.get('summary', '')
-        pub_date_raw = entry.get('published', datetime.now().strftime('%a, %d %b %Y %H:%M:%S +0000'))
-        try:
-            pub_date = datetime.strptime(pub_date_raw, '%a, %d %b %Y %H:%M:%S %z').date().isoformat()
-        except Exception:
-            pub_date = datetime.now().date().isoformat()
+        pub_date_raw = entry.get('published', datetime.now(timezone.utc).isoformat())
+
+        time_relative = time_ago(pub_date_raw)
 
         image_url = None
         if 'media_content' in entry and len(entry.media_content) > 0:
@@ -135,7 +200,7 @@ def main():
             title=title,
             image_url=image_url,
             category=category,
-            date=pub_date,
+            time_relative=time_relative,
             content=summary
         )
         if md_file:
