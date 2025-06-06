@@ -8,6 +8,7 @@ from datetime import datetime
 RSS_URL = "https://feed.alternativeto.net/news/all"
 GEMINI_API_KEY = "AIzaSyBWmO0VrIL5HbU3RFPRRMmlDFBisoSAt2s"  # استبدل بمفتاح API الخاص بك
 NEWS_FOLDER = "news"
+POSTED_IDS_FILE = "posted_ids.txt"
 
 def slugify(text):
     text = re.sub(r'[^\w\s-]', '', text, flags=re.UNICODE)
@@ -19,6 +20,16 @@ def create_news_folder():
 
 def file_exists(filename):
     return os.path.exists(filename)
+
+def load_posted_ids(filename=POSTED_IDS_FILE):
+    if not os.path.exists(filename):
+        return set()
+    with open(filename, "r", encoding="utf-8") as f:
+        return set(line.strip() for line in f.readlines())
+
+def save_posted_id(post_id, filename=POSTED_IDS_FILE):
+    with open(filename, "a", encoding="utf-8") as f:
+        f.write(post_id + "\n")
 
 def gemini_request(prompt, max_retries=10, wait_seconds=10):
     url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={GEMINI_API_KEY}"
@@ -67,9 +78,7 @@ def gemini_generate_title_and_summary(article_text):
     return gemini_request(prompt)
 
 def clean_title(title):
-    # إزالة علامات اقتباس وأي رموز غير الحروف والأرقام والمسافات والواصلات
     title = title.replace('"', '').replace("'", '')
-    # إزالة أي رموز غير الحروف العربية أو الإنجليزية أو الأرقام أو المسافات أو الواصلات
     title = re.sub(r'[^\w\s\-ء-ي]', '', title, flags=re.UNICODE)
     return title.strip()
 
@@ -79,7 +88,6 @@ def save_markdown(title, image_url, category, date, content):
     if file_exists(md_filename):
         print(f"الملف موجود مسبقًا: {md_filename}")
         return None, None
-    # لا نستخدم علامات اقتباس في العنوان
     front_matter = f"""---
 layout: default
 title: {title}
@@ -98,6 +106,7 @@ date: {date}
 
 def main():
     create_news_folder()
+    posted_ids = load_posted_ids()
     feed = feedparser.parse(RSS_URL)
     entries = feed.entries
     if not entries:
@@ -105,6 +114,11 @@ def main():
         return
 
     for entry in entries[:5]:  # عدّل العدد حسب رغبتك
+        post_id = entry.get('id') or entry.get('link') or entry.get('title', '')
+        if post_id in posted_ids:
+            print(f"تم نشر المنشور مسبقًا: {post_id}")
+            continue
+
         description = entry.get('summary', '')
         pub_date_raw = entry.get('published', datetime.now().strftime('%a, %d %b %Y %H:%M:%S +0000'))
         try:
@@ -140,6 +154,8 @@ def main():
         )
         if md_file:
             print(f"رابط المقال: {url}")
+            save_posted_id(post_id)
+            posted_ids.add(post_id)
         else:
             print("تخطى المقال لأنه موجود مسبقًا.")
 
