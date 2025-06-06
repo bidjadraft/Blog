@@ -66,13 +66,17 @@ def gemini_generate_title_and_summary(article_text):
     )
     return gemini_request(prompt)
 
+def clean_title(title):
+    # إزالة رموز ** و * من العنوان
+    title = title.replace("**", "").replace("*", "")
+    return title.strip()
+
 def save_markdown(title, image_url, category, date, content):
     file_slug = slugify(title)
     md_filename = f"{NEWS_FOLDER}/{date}-{file_slug}.md"
     if file_exists(md_filename):
         print(f"الملف موجود مسبقًا: {md_filename}")
         return None, None
-    # ضع العنوان ورابط الصورة بين علامات اقتباس مزدوجة لتجنب مشاكل YAML
     front_matter = f"""---
 layout: default
 title: "{title}"
@@ -119,7 +123,7 @@ def main():
             continue
 
         lines = result.split('\n', 1)
-        title = lines[0].strip()
+        title = clean_title(lines[0]) if lines else "عنوان غير متوفر"
         summary = lines[1].strip() if len(lines) > 1 else ""
 
         category = "التقنية"
