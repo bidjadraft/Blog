@@ -79,33 +79,6 @@ def gemini_paraphrase_article(article_text):
     )
     return gemini_request(prompt)
 
-def gemini_detect_category(description_text):
-    categories = [
-        "تطبيقات",
-        "برامج",
-        "منصات",
-        "خدمات",
-        "أنظمة",
-        "تحديثات",
-        "أخبار"
-    ]
-    prompt = (
-        "اختر تصنيفًا واحدًا فقط من القائمة التالية يناسب هذا النص باللغة العربية، "
-        "التصنيف يجب أن يكون مطابقًا تمامًا لأحد التصنيفات التالية:\n"
-        f"{', '.join(categories)}\n"
-        "النص:\n"
-        f"{description_text}\n"
-        "أعطني التصنيف فقط بدون شرح أو كلمات إضافية. "
-        "إذا لم يكن النص مناسبًا لأي تصنيف، اكتب 'غير محدد'."
-    )
-    category = gemini_request(prompt)
-    if category:
-        category = category.strip()
-        if category not in categories:
-            category = "غير محدد"
-        return category
-    return "غير محدد"
-
 def save_markdown(title, image_url, category, date, content):
     file_slug = slugify(title)
     md_filename = f"{NEWS_FOLDER}/{date}-{file_slug}.md"
@@ -164,7 +137,7 @@ def main():
             print("فشل إعادة صياغة المقال، تجاهل المنشور.")
             continue
 
-        category = gemini_detect_category(description or original_title)
+        category = "التقنية"  # التصنيف ثابت
 
         md_file, url = save_markdown(
             title=title_ar,
