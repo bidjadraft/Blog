@@ -1,1 +1,1 @@
-https://alternativeto.net/news/2025/6/linux-mint-22-2-adds-fingerprint-login-new-core-app-updates-and-ends-20-x-support/
+https://alternativeto.net/news/2025/6/gnome-to-disable-x11-session-by-default-in-version-49-plans-full-removal/
