@@ -1,1 +1,1 @@
-https://alternativeto.net/news/2025/6/ktor-3-2-0-brings-dependency-injection-htmx-modules-and-gradle-support/
+https://alternativeto.net/news/2025/6/new-critical-linux-flaws-let-attackers-escalate-to-root-via-pam-and-udisks-vulnerabilities/
