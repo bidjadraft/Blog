@@ -1,1 +1,1 @@
-https://alternativeto.net/news/2025/6/gitlab-18-1-released-with-maven-virtual-registry-in-beta-duo-code-review-and-more/
+https://alternativeto.net/news/2025/6/ktor-3-2-0-brings-dependency-injection-htmx-modules-and-gradle-support/
