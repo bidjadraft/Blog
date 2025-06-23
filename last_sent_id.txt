@@ -1,1 +1,1 @@
-https://alternativeto.net/news/2025/6/anthropic-expands-claude-code-support-to-let-developers-use-any-remote-mcp-server/
+https://alternativeto.net/news/2025/6/prettier-3-6-released-with-experimental-cli-and-official-oxc-and-hermes-plugins/
