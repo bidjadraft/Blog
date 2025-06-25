@@ -1,1 +1,1 @@
-https://alternativeto.net/news/2025/6/vite-7-0-drops-node-js-18-updates-browser-targets-and-adds-buildapp-hook/
+https://alternativeto.net/news/2025/6/warp-2-0-introduce-a-unified-agentic-development-environment-running-within-the-terminal/
