@@ -1,1 +1,1 @@
-https://alternativeto.net/news/2025/6/black-forest-labs-launches-flux-1-kontext-dev--a-new-12b-parameter-image-editing-model/
+https://alternativeto.net/news/2025/6/rust-1-88-released-with-let-statements-chaining-naked-functions-and-cargo-cache-cleaning/
