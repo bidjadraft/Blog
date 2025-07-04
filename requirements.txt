@@ -1,3 +1,7 @@
 feedparser
 requests
 python-telegram-bot
+pyppeteer
+google-genai
+python-dotenv
+
