@@ -1,1 +1,1 @@
-https://alternativeto.net/news/2025/7/rei3-11-update-global-search-openid-connect-and-improved-file-handling/
+https://alternativeto.net/news/2025/7/bash-5-3-adds-new-command-substitution-and-completion-improved-scripting-and-c23-compliance/
